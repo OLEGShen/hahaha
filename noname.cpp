@@ -180,6 +180,148 @@ void switchCaseNum(vector<string> A)
 	}
 	cout<<endl;
 }
+
+void wordForIf(stack<string> &ifElseWords,string word, int &elseIfNum, int &ifElseNum)
+{
+	if(word == "if")
+	{
+		ifElseWords.push(word);
+	}
+	else if(word == "else")
+	{
+		if(ifElseWords.top() == "if")
+		{
+			ifElseWords.pop();
+			ifElseNum ++;
+			cout<<"      "<<"dd"<<endl;
+		}
+		else if(ifElseWords.top() == "else if")
+		{
+			ifElseWords.pop();
+			ifElseWords.pop();
+			elseIfNum++;
+		}
+	}
+	else if(word == "else if")
+	{
+		if(ifElseWords.top() == "else if")
+		{
+		}
+		else 
+		{
+			
+			ifElseWords.push(word);
+		}
+	}
+}
+
+void ifNums(ifstream &infile, int &ifElseNum, int &elseIfNum)
+{
+	string str;
+	int len = 0;
+	stack<string> ifElseWords;
+	if(infile.is_open())
+	{
+		bool isLine = true;
+		bool isIf = false;
+		while(getline(infile, str))//得到一行 
+		{	
+			str = getRightString(str);	
+			len = str.length();
+			int wordBegin = 0;
+			int wordEnd = 0;
+			bool isLetter = false;
+			string word;
+			str = getRightString(str);
+			for(int i = 0; i < len; i++)
+			{
+				if(isLine)
+				{
+					if(str[i] == '/' && str[i + 1] == '*')
+					{
+						isLine = false;
+						i++;
+						continue;
+					}
+					if(ifElseWords.size() != 0)
+					{
+						if(str[i] == '{')
+						{
+							string tempStr;
+							tempStr.push_back(str[i]);
+							
+							ifElseWords.push(tempStr);
+							continue;
+						}
+						else if(str[i] == '}')
+						{
+							string tempStr;
+							tempStr.push_back(str[i]);
+							if(ifElseWords.top() == "{")
+							{
+								ifElseWords.pop();
+								continue;
+							}
+							else 
+							{
+								ifElseWords.push(tempStr);
+							}
+								
+						}
+					}
+					if(str[i] <= 'z' && str[i] >= 'a')
+					{
+						if(!isLetter)
+						{
+							isLetter = true;
+							wordBegin = i;
+						}
+						else 
+						{
+							if(i + 1 == len)
+							{
+								wordEnd = i + 1; 
+								word = str.substr(wordBegin, wordEnd - wordBegin);
+								wordForIf(ifElseWords, word, elseIfNum, ifElseNum);
+							}
+							if(str[i + 1] > 'z' || str[i + 1] < 'a')
+							{
+								isLetter = false;
+								wordEnd = i + 1;
+								word = str.substr(wordBegin, wordEnd - wordBegin);
+								if (word == "else")
+								{
+									
+									if(i + 2 < len)
+									{
+										if(str[i + 2] =='i' && str[i + 3] == 'f')
+										{
+											word = "else if";
+											
+											i += 3;
+										}
+									}	
+								}
+								wordForIf(ifElseWords, word, elseIfNum, ifElseNum);
+								
+							}
+						}
+					}
+				}
+				else
+				{
+					if(str[i] == '*' && str[i + 1] == '/')
+					{
+						isLine = true;
+						i++;
+					}	
+				}
+//				cout<<"dfwef    ";	
+			}
+		}
+		
+	}
+}
  
 int main(){
 	string location;
@@ -198,20 +340,16 @@ int main(){
 	}
 	int ans;
 	vector<string> words;
-	keyWordNum(infile, ans,words);
-	for(auto &x:words)
-	{
-		cout<<x<<endl;
-	}
-	cout<<"total num: "<<ans<<endl;
-	switchCaseNum(words);
+	//keyWordNum(infile, ans,words);
+	int ifElseNum = 0, elseIfNum = 0;
+	ifNums(infile, ifElseNum, elseIfNum);
+	cout<<"if-else num: "<<ifElseNum<<endl;
+	cout<<"if-elseif-else num:"<<elseIfNum<<endl;
+//	for(auto &x:words)
+//	{
+//		cout<<x<<endl;
+//	}
+//	cout<<"total num: "<<ans<<endl;
+//	switchCaseNum(words);
 	return 0;
 }
-
-
-//读取所有信息判断有多少关键字 
-
-
- 
-
-
