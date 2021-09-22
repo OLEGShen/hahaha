@@ -146,7 +146,39 @@ void keyWordNum(ifstream &infile, int &ans, vector<string> &words)//µÚÒ»»·½Ú:¼ÆË
 
 void switchCaseNum(vector<string> A)
 {
-	
+	int ansA = 0;
+	vector<int> ansB;
+	int temp;
+	int len = A.size();
+	bool isIn = false;
+	for(int i = 0; i < len; i++)
+	{
+		if(A[i] == "switch" && !isIn)
+		{
+			ansA ++;
+			isIn = true;
+		}
+		if(isIn)
+		{
+			if(A[i] == "case")
+			{
+				temp++;
+			}
+			if(A[i] == "default")
+			{
+				ansB.push_back(temp);
+				temp = 0;
+				isIn = false;
+			}
+		}
+	}
+	cout<<"switch num: "<<ansA<<endl;
+	cout<<"case num: ";
+	for(int i =0; i < ansB.size(); i++)
+	{
+		cout<<ansB[i]<<" ";
+	}
+	cout<<endl;
 }
  
 int main(){
@@ -172,6 +204,7 @@ int main(){
 		cout<<x<<endl;
 	}
 	cout<<"total num: "<<ans<<endl;
+	switchCaseNum(words);
 	return 0;
 }
 
