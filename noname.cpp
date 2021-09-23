@@ -43,12 +43,6 @@ string getRightString(string str)//处理字符串中的特殊情况：// “” /**/
 				isit = 1;
 				continue;
 			}
-//			else if(str[i] == '/' && str[i + 1] == '*')
-//			{
-//				isit = 2;
-//				i++;
-//				continue;
-//			}
 			else if(str[i] == str[i + 1] && str[i] == '/')
 			{
 				break;
@@ -64,14 +58,6 @@ string getRightString(string str)//处理字符串中的特殊情况：// “” /**/
 			{
 				isit = 0;
 			}
-//			else if(isit == 2)
-//			{
-//				if(str[i] == '*' && str[i + 1] == '/')
-//				{
-//					isit = 0;
-//					i++;
-//				}
-//			}
 		}
 	
 	}
@@ -193,7 +179,6 @@ void wordForIf(stack<string> &ifElseWords,string word, int &elseIfNum, int &ifEl
 		{
 			ifElseWords.pop();
 			ifElseNum ++;
-			cout<<"      "<<"dd"<<endl;
 		}
 		else if(ifElseWords.top() == "else if")
 		{
@@ -322,6 +307,7 @@ void ifNums(ifstream &infile, int &ifElseNum, int &elseIfNum)
 		
 	}
 }
+  
  
 int main(){
 	string location;
@@ -331,7 +317,6 @@ int main(){
 	cout<<"你想要的等级";
 	cin>>rank;
 	
-	
 	ifstream infile;
 	infile.open(location, ios::in);
 	if(!infile)
@@ -340,16 +325,29 @@ int main(){
 	}
 	int ans;
 	vector<string> words;
-	//keyWordNum(infile, ans,words);
+	keyWordNum(infile, ans,words);
+	infile.close();
+	
+	if(rank >=1)
+		cout<<"total num: "<<ans<<endl;
+	if(rank >=2)
+		switchCaseNum(words);
 	int ifElseNum = 0, elseIfNum = 0;
-	ifNums(infile, ifElseNum, elseIfNum);
-	cout<<"if-else num: "<<ifElseNum<<endl;
-	cout<<"if-elseif-else num:"<<elseIfNum<<endl;
-//	for(auto &x:words)
-//	{
-//		cout<<x<<endl;
-//	}
-//	cout<<"total num: "<<ans<<endl;
-//	switchCaseNum(words);
+	if(rank >= 3)
+	{
+		ifstream file;
+		file.open(location, ios::in);
+		if(!file)
+		{
+			cerr<<"error:unable to open input file"<<endl;
+		}
+		
+		ifNums(file, ifElseNum, elseIfNum);
+		cout<<"if-else num: "<<ifElseNum<<endl;
+	}
+	if(rank >= 4)
+	{
+		cout<<"if-elseif-else num:"<<elseIfNum<<endl;
+	}
 	return 0;
 }
