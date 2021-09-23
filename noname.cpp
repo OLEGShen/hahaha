@@ -1,3 +1,4 @@
+//lab2: to count the keywords of C/C++ file
 #include <iostream>
 #include <string>
 #include <queue>
@@ -8,6 +9,7 @@
 #include <vector>
 using namespace std; 
 
+//keywords
 const string keyWords[32] = {
 	"auto", "break", "case", "char", "const", "continue",
 	"default", "double", "else", "enum", "extern", "float",
@@ -16,7 +18,13 @@ const string keyWords[32] = {
 	"typedef", "union", "unsigned", "void", "volatile", "while"
 };
 
-void isKeyWords(string word, int &keyWordNum ,vector<string> &words)//¼òµ¥µÄµ¥´ÊÆ¥Åä 
+
+//enters the integer for counting the num of keyWords and the word to judge and the vector to save keywords
+//the keywordNum and words are the paramters being used in the next operation 
+//the function is used to judge whether the word is keyword 
+//if it is keyword,it will be add to words and keywordnum will be add 1
+//no return but keywordnum and words will be changed
+void isKeyWords(string word, int &keyWordNum ,vector<string> &words)
 {
 	for(int i = 0; i < 32; i++)
 	{
@@ -29,7 +37,12 @@ void isKeyWords(string word, int &keyWordNum ,vector<string> &words)//¼òµ¥µÄµ¥´Ê
 	}
 }
 
-string getRightString(string str)//´¦Àí×Ö·û´®ÖÐµÄÌØÊâÇé¿ö£º// ¡°¡± /**/
+
+//Enter the contents of each line as a string
+// Handles special cases in strings:// "" and delete them 
+//used for processing each line of the file
+//return the string after deleting
+string getRightString(string str)
 {
 	string ans;
 	int isit = 0;
@@ -64,7 +77,11 @@ string getRightString(string str)//´¦Àí×Ö·û´®ÖÐµÄÌØÊâÇé¿ö£º// ¡°¡± /**/
 	return ans;
 }
 
-void keyWordNum(ifstream &infile, int &ans, vector<string> &words)//µÚÒ»»·½Ú:¼ÆËãÊýÁ¿ 
+//enter the fstream of C file, the num of keywords and the vector of keywords
+//for rank 1 : count the num of keywords
+//Each line is iterated, adding the keywords to the vector and counting
+//no return but the ans and words are be quoted ,they are the target of function processing
+void keyWordNum(ifstream &infile, int &ans, vector<string> &words) 
 {
 	string str;
 	ans = 0;
@@ -73,7 +90,7 @@ void keyWordNum(ifstream &infile, int &ans, vector<string> &words)//µÚÒ»»·½Ú:¼ÆË
 	if(infile.is_open())
 	{
 		bool isLine = true;
-		while(getline(infile, str))//µÃµ½Ò»ÐÐ 
+		while(getline(infile, str))//ï¿½Ãµï¿½Ò»ï¿½ï¿½ 
 		{	
 			str = getRightString(str);	
 			len = str.length();
@@ -130,6 +147,11 @@ void keyWordNum(ifstream &infile, int &ans, vector<string> &words)//µÚÒ»»·½Ú:¼ÆË
 	}
 }
 
+
+//enter the keywords vector
+//to count the num of switch and case and display result
+//no return
+//before this func we need do keyWordNum function
 void switchCaseNum(vector<string> A)
 {
 	int ansA = 0;
@@ -167,6 +189,10 @@ void switchCaseNum(vector<string> A)
 	cout<<endl;
 }
 
+//enter the keyword of if else else-if, the stack, the num of else if and if else;
+//the stack and two int are quated in this function;
+//check if the word is if/else/else if to stack in/out and count the num;
+//no return but the target is int &elseIfNum, int &ifElseNum;
 void wordForIf(stack<string> &ifElseWords,string word, int &elseIfNum, int &ifElseNum)
 {
 	if(word == "if")
@@ -200,6 +226,8 @@ void wordForIf(stack<string> &ifElseWords,string word, int &elseIfNum, int &ifEl
 	}
 }
 
+
+//get every if else and {} in the stack to count the if-else/if-elseif-else num;
 void ifNums(ifstream &infile, int &ifElseNum, int &elseIfNum)
 {
 	string str;
@@ -209,7 +237,7 @@ void ifNums(ifstream &infile, int &ifElseNum, int &elseIfNum)
 	{
 		bool isLine = true;
 		bool isIf = false;
-		while(getline(infile, str))//µÃµ½Ò»ÐÐ 
+		while(getline(infile, str))//ï¿½Ãµï¿½Ò»ï¿½ï¿½ 
 		{	
 			str = getRightString(str);	
 			len = str.length();
@@ -269,7 +297,7 @@ void ifNums(ifstream &infile, int &ifElseNum, int &elseIfNum)
 								word = str.substr(wordBegin, wordEnd - wordBegin);
 								wordForIf(ifElseWords, word, elseIfNum, ifElseNum);
 							}
-							if(str[i + 1] > 'z' || str[i + 1] < 'a')
+							else if(str[i + 1] > 'z' || str[i + 1] < 'a')
 							{
 								isLetter = false;
 								wordEnd = i + 1;
@@ -312,9 +340,9 @@ void ifNums(ifstream &infile, int &ifElseNum, int &elseIfNum)
 int main(){
 	string location;
 	int rank;
-	cout<<"ÊäÈëÎÄ¼þµÄÖ¸¶¨Î»ÖÃ";
+	cout<<"ÊäÈëµØÖ·: ";
 	cin>>location;
-	cout<<"ÄãÏëÒªµÄµÈ¼¶";
+	cout<<"rank: ";
 	cin>>rank;
 	
 	ifstream infile;
