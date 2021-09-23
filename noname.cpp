@@ -90,7 +90,7 @@ void keyWordNum(ifstream &infile, int &ans, vector<string> &words)
 	if(infile.is_open())
 	{
 		bool isLine = true;
-		while(getline(infile, str))//�õ�һ�� 
+		while(getline(infile, str))
 		{	
 			str = getRightString(str);	
 			len = str.length();
@@ -226,7 +226,9 @@ void wordForIf(stack<string> &ifElseWords,string word, int &elseIfNum, int &ifEl
 	}
 }
 
-
+//enter ifstream , two int;
+//get the if /else / { / } / else-if to the stack or get out;
+//when get out the if else count++;
 //get every if else and {} in the stack to count the if-else/if-elseif-else num;
 void ifNums(ifstream &infile, int &ifElseNum, int &elseIfNum)
 {
@@ -237,7 +239,7 @@ void ifNums(ifstream &infile, int &ifElseNum, int &elseIfNum)
 	{
 		bool isLine = true;
 		bool isIf = false;
-		while(getline(infile, str))//�õ�һ�� 
+		while(getline(infile, str))
 		{	
 			str = getRightString(str);	
 			len = str.length();
@@ -329,7 +331,6 @@ void ifNums(ifstream &infile, int &ifElseNum, int &elseIfNum)
 						i++;
 					}	
 				}
-//				cout<<"dfwef    ";	
 			}
 		}
 		
@@ -344,7 +345,7 @@ int main(){
 	cin>>location;
 	cout<<"rank: ";
 	cin>>rank;
-	
+	//rank1
 	ifstream infile;
 	infile.open(location, ios::in);
 	if(!infile)
@@ -358,9 +359,11 @@ int main(){
 	
 	if(rank >=1)
 		cout<<"total num: "<<ans<<endl;
+	//rank2
 	if(rank >=2)
 		switchCaseNum(words);
 	int ifElseNum = 0, elseIfNum = 0;
+	//rank3
 	if(rank >= 3)
 	{
 		ifstream file;
@@ -373,6 +376,7 @@ int main(){
 		ifNums(file, ifElseNum, elseIfNum);
 		cout<<"if-else num: "<<ifElseNum<<endl;
 	}
+	//rank 4
 	if(rank >= 4)
 	{
 		cout<<"if-elseif-else num:"<<elseIfNum<<endl;
